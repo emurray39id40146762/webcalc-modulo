@@ -1,12 +1,6 @@
 steps:
-  # Install dependencies
-  - name: python
-    entrypoint: pip
-    args: ["install", "-r", "requirements.txt", "--user"]
-   # Run unit tests
-- name: python
-  entrypoint: python
-  args: ["-m", "pytest"] 
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['functions', 'deploy', 'webcalc-modulus', '--trigger-http', '--runtime', 'python37', '--entry-point', 'calculate']
   dir: 'function/dir/from/repo/root'
+
+
