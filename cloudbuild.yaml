@@ -7,7 +7,7 @@ steps:
   # Run unit tests
   - name: python
     entrypoint: python
-    args: ["-m","set PORT=8080", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
+    args: ["-m","PORT=8080", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
 
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
