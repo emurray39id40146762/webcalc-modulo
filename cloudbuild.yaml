@@ -4,10 +4,7 @@ steps:
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
 
-  # Run unit tests
-  - name: python
-    entrypoint: python
-    args: ["-m","PORT=8080", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
+    ##testing ideally
 
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
