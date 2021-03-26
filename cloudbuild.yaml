@@ -1,23 +1,10 @@
 steps:
-  # Install dependencies
-  - name: python
-    entrypoint: pip
-    args: ["install", "-r", "requirements.txt", "--user"]
-
-    ##testing ideally
-
-  # Docker Build
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t',
-           'us-central1-docker.pkg.dev/webcalc-modulus/webcalc-modulo/myimage:$SHORT_SHA', '.']
-
-  # Docker push to Google Artifact Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push',  'us-central1-docker.pkg.dev/webcalc-modulus/webcalc-modulo/myimage:$SHORT_SHA']
-
-  # Deploy to Cloud Run
-  - name: google/cloud-sdk
-    args: ['gcloud', 'run', 'deploy', 'calculate',
-           '--image=us-central1-docker.pkg.dev/webcalc-modulus/webcalc-modulo/myimage:$SHORT_SHA',
-           '--region', 'us-central1', '--platform', 'managed',
-           '--allow-unauthenticated']
+- name: 'docker.io/library/python:3.7'
+  entrypoint: /bin/sh
+  # Run pip install and pytest in the same build step
+  # (pip packages won't be preserved in future steps!)
+  args: [-c, 'pip install -r requirements.txt && pytest']
+  dir: 'function/dir/from/repo/root'
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['functions', 'deploy', '[calculate]', '[--trigger-http]', '--runtime', 'python37']
+  dir: 'function/dir/from/repo/root'
